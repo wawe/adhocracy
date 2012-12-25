@@ -3,9 +3,9 @@ Add and run tests
 
 Before every commit you have to run all tests. Every new feature
 has to have a good test coverage. You should use Test Driven Develpment
-(http://en.wikipedia.org/wiki/Test-driven_development) and Acceptance Test 
-Driven Develpment. Acceptance Tests correspondence to user stories 
-(http://en.wikipedia.org/wiki/User_story). They use TestBrowser 
+(http://en.wikipedia.org/wiki/Test-driven_development) and Acceptance Test
+Driven Develpment. Acceptance Tests correspondence to user stories
+(http://en.wikipedia.org/wiki/User_story). They use TestBrowser
 sessions and reside inside the functional tests directory.
 
 
@@ -18,14 +18,14 @@ Add a new test
 
 Run all tests
 --------------
- 
+
 In an `adhocracy.buildout`_ you have ``bin/test``. Alternatively you can call::
 
-  (adhocracy)$ bin/nosetests --with-pylons=src/adhocracy/test.ini src/adhocracy/adhocracy/tests``
+  (adhocracy)$ bin/nosetests --with-pylons=etc/test.ini src/adhocracy/adhocracy/tests``
 
 
 
-Run one test file 
+Run one test file
 ------------------
 
 ::
