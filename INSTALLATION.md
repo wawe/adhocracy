@@ -58,33 +58,24 @@ To make the apache vhost config work run:
    $ sudo apt-get install libapache2-mod-proxy-html
    $ sudo a2enmod proxy proxy_http proxy_html
 
-Checkout the adhocracy buildout:
+Checkout out adhocracy:
 
-   $ git clone https://github.com/liqd/adhocracy.buildout adhocracy_buildout  
+   $ git clone https://github.com/liqd/adhocracy adhocracy_buildout  
  
-Setup a python virtualenv:
-
-    $ cd adhocracy_buildout 
-    $ virtualenv --distribute --no-site-packages .
-    $ source bin/activate
-
 Run buildout:
 
     $ bin/python bootstrap.py 
     $ bin/buildout
 
-Start your database (and dependency servers):
+Start adhocracy and dependency servers):
 
     $ bin/supervisord 
 
-Setup the adhocracy database:
+If you do not use the buildout to compile and start the postgres database system,
+you have to setup the adhocracy database manually:
 
     $ bin/paster setup-app etc/adhocracy.ini --name=content
 
-Restart adhocracy and all dependency servers:
-
-    $ bin/supervisorctl reload 
- 
 
 Additional steps in adhocracy geo branch
 ----------------------------------------
