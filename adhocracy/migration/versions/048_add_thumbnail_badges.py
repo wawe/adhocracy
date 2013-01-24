@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy import Column, ForeignKey, MetaData, Table
-from sqlalchemy import Boolean, Integer, DateTime, String, Unicode, LargeBinary
+from sqlalchemy import Boolean, Integer, DateTime, String, Unicode,\
+        LargeBinary
 
 metadata = MetaData()
 
@@ -24,10 +25,11 @@ badge_table = Table(
     extend_existing=True
 )
 
-
 def upgrade(migrate_engine):
     #use sqlalchemy-migrate database connection
     metadata.bind = migrate_engine
+    #autoload needed tables
+    instance_table = Table('instance', metadata, autoload=True)
     #add thumbnail column to table
     thumbnail = Column('thumbnail', LargeBinary, default=None, nullable=True)
     #create/recreate the table
