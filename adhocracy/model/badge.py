@@ -28,7 +28,8 @@ badge_table = Table(
                                               ondelete="CASCADE",),
            nullable=True),
     # attributes for hierarchical badges (CategoryBadges)
-    Column('select_child_description', Unicode(255), default=u'', nullable=False),
+    Column('select_child_description', Unicode(255), default=u'',
+           nullable=False),
     Column('parent_id', Integer, ForeignKey('badge.id', ondelete="CASCADE"),
            nullable=True),
     # attributes for UserBadges
@@ -299,13 +300,14 @@ class DelegateableBadges(Badges):
 
 # --[ Category Badges ]-----------------------------------------------------
 
+
 class CategoryBadge(DelegateableBadge):
 
     polymorphic_identity = 'category'
 
     @classmethod
-    def create(cls, title, color, visible, description, instance=None, parent=None,
-               select_child_description=u'', ):
+    def create(cls, title, color, visible, description, instance=None,
+               parent=None, select_child_description=u'', ):
         badge = cls(title, color, visible, description, instance)
         badge.parent = parent
         badge.select_child_description = select_child_description
@@ -319,7 +321,9 @@ class CategoryBadge(DelegateableBadge):
         d['select_child_description'] = self.select_child_description
         return d
 
+
 # --[ Thumbnail Badges ]-----------------------------------------------------
+
 
 class ThumbnailBadge(DelegateableBadge):
 
