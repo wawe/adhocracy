@@ -46,6 +46,7 @@ setup(
         "python-twitter>=0.6",
         "oauth2",  # undeclared requirement of python-twitter
         "oauth>=1.0.1",
+        "ordereddict",
         "amqplib>=0.6.1",
         "babel>=0.9",
         "beautifulsoup>=3.0.7",
