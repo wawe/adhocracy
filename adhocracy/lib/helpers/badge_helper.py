@@ -8,24 +8,28 @@ def generate_thumbnail_tag(badge, height="48", width="48"):
     """
     heigth = height
     width = width
-    #TODO resize and get mimetype from PIL, joka
     #TODO cache, joka
-    #TODO test, joka
     #TODO config option to set default width/height, joka
-    #TODO what todo if no colour and no thumbnail?, joka
-    mimetype = "image/png"
+    #TODO Generated image is not Working with IE < 8, joka
+
     img_template = """<img src="data:%s;base64,%s" height="%s" width="%s" />"""
-    data = badge.thumbnail
-    colour = badge.color or u"#ffffff"
-    if not data:
+    imagefile = StringIO.StringIO(badge.thumbnail)
+    mimetype = "image/png"
+    try:
+        im = Image.open(imagefile)
+        mimetype = "image/" + im.format.lower()
+        im.thumbnail((width, heigth), Image.ANTIALIAS)
+    except  IOError:
+        colour = badge.color or u"#ffffff"
         im = Image.new('RGB', (10, 10))
         draw = ImageDraw.Draw(im)
         draw.rectangle((0, 0, 10, 10), fill=colour, outline=colour)
         f = StringIO.StringIO()
         im.save(f, "PNG")
-        data = f.getvalue()
-        del draw, im, f
-    data_enc = b64encode(data)
+        imagefile = f
+        del draw, im
+    data_enc = b64encode(imagefile.getvalue())
+    del imagefile
     return (img_template % (mimetype, data_enc, heigth, width))
 
 
