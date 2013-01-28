@@ -104,6 +104,8 @@ class InstanceGeneralEditForm(formencode.Schema):
 
 class InstanceAppearanceEditForm(formencode.Schema):
     allow_extra_fields = True
+    thumbnailbadges_width = validators.Int(not_empty=False)
+    thumbnailbadges_height = validators.Int(not_empty=False)
     css = validators.String(max=100000, if_empty=None, not_empty=False)
 
 
@@ -124,6 +126,8 @@ class InstanceContentsEditForm(formencode.Schema):
     hide_global_categories = validators.StringBool(
         not_empty=False, if_empty=False, if_missing=False)
     editable_comments_default = validators.StringBool(
+        not_empty=False, if_empty=False, if_missing=False)
+    allow_thumbnailbadges = validators.StringBool(
         not_empty=False, if_empty=False, if_missing=False)
 
 
@@ -225,7 +229,7 @@ class InstanceController(BaseController):
 
             number = asint(config.get(
                 'adhocracy.number_instance_overview_milestones', 3))
-            
+
             milestones = model.Milestone.all_future_q(
                 instance=c.page_instance).limit(number).all()
 
@@ -236,7 +240,7 @@ class InstanceController(BaseController):
         events = model.Event.find_by_instance(c.page_instance, limit=3)
 
         c.events_pager = pager.events(events,
-                                      enable_pages=False, 
+                                      enable_pages=False,
                                       enable_sorts=False)
 
         c.stats = {
@@ -525,6 +529,8 @@ class InstanceController(BaseController):
             defaults={
                 '_method': 'PUT',
                 'css': c.page_instance.css,
+                'thumbnailbadges_width': c.page_instance.thumbnailbadges_width,
+                'thumbnailbadges_height': c.page_instance.thumbnailbadges_height,
                 '_tok': csrf.token_id()})
 
     @RequireInstance
@@ -544,7 +550,10 @@ class InstanceController(BaseController):
                 message=_(u'The logo has been deleted.'))
 
         # process the normal form
-        updated = update_attributes(c.page_instance, self.form_result, ['css'])
+        updated = update_attributes(c.page_instance, self.form_result,
+                                    ['css',
+                                     'thumbnailbadges_width',
+                                     'thumbnailbadges_height'])
         try:
             # fixme: show logo errors in the form
             if ('logo' in request.POST and
@@ -577,6 +586,7 @@ class InstanceController(BaseController):
                 'allow_propose': instance.allow_propose,
                 'milestones': instance.milestones,
                 'use_norms': instance.use_norms,
+                'allow_thumbnailbadges': instance.allow_thumbnailbadges,
                 'require_selection': instance.require_selection,
                 'hide_global_categories': instance.hide_global_categories,
                 'editable_comments_default': instance.editable_comments_default,
@@ -596,7 +606,7 @@ class InstanceController(BaseController):
             c.page_instance, self.form_result,
             ['allow_propose', 'allow_index', 'frozen', 'milestones',
              'use_norms', 'require_selection', 'hide_global_categories',
-             'editable_comments_default'])
+             'editable_comments_default', 'allow_thumbnailbadges'])
         return self.settings_result(updated, c.page_instance, 'contents')
 
     def settings_voting_form(self, id):

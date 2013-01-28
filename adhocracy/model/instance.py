@@ -44,7 +44,10 @@ instance_table = \
           Column('require_selection', Boolean, nullable=True, default=False),
           Column('is_authenticated', Boolean, nullable=True, default=False),
           Column('hide_global_categories', Boolean, nullable=True, default=False),
-          Column('editable_comments_default', Boolean, nullable=True, default=True)
+          Column('editable_comments_default', Boolean, nullable=True, default=True),
+          Column('allow_thumbnailbadges', Boolean, default=False),
+          Column('thumbnailbadges_height', Integer, nullable=True),
+          Column('thumbnailbadges_width', Integer, nullable=True),
           )
 
 
@@ -233,6 +236,9 @@ class Instance(meta.Indexable):
                  allow_propose=self.allow_propose,
                  allow_index=self.allow_index,
                  hidden=self.hidden,
+                 allow_thumbnailbadges=self.allow_thumbnailbadges,
+                 thumbnailbadges_height=self.thumbnailbadges_height,
+                 thumbnailbadges_width=self.thumbnailbadges_width,
                  url=h.entity_url(self),
                  instance_url=h.instance.url(self),
                  default_group=self.default_group.code,
