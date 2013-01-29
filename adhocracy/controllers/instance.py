@@ -223,8 +223,8 @@ class InstanceController(BaseController):
         #c.tags = sorted(text.tag_cloud_normalize(tags),
         #                key=lambda (k, c, v): k.name)
 
-        if asbool(config.get('adhocracy.show_instance_overview_milestones'))\
-           and c.page_instance.milestones:
+        if (asbool(config.get('adhocracy.show_instance_overview_milestones'))
+                and c.page_instance.milestones):
 
             number = asint(config.get(
                 'adhocracy.number_instance_overview_milestones', 3))
@@ -558,10 +558,10 @@ class InstanceController(BaseController):
         try:
             # fixme: show logo errors in the form
             if ('logo' in request.POST and
-                hasattr(request.POST.get('logo'), 'file') and
-                request.POST.get('logo').file):
-                    logo.store(c.page_instance, request.POST.get('logo').file)
-                    updated = True
+                    hasattr(request.POST.get('logo'), 'file') and
+                    request.POST.get('logo').file):
+                logo.store(c.page_instance, request.POST.get('logo').file)
+                updated = True
         except Exception, e:
             model.meta.Session.rollback()
             h.flash(unicode(e), 'error')
