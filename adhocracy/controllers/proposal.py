@@ -486,7 +486,7 @@ class ProposalController(BaseController):
                         'thumbnail': generate_thumbnail_tag(badge),
                         'checked': badge.id == checked_thumbnail} for badge in
                         c.thumbnailbadges]
-                   }
+                    }
             return render_json(json)
 
         return formencode.htmlfill.render(
@@ -498,7 +498,6 @@ class ProposalController(BaseController):
     @ActionProtector(authorization.has_permission("instance.admin"))
     @csrf.RequireInternalRequest(methods=['POST'])
     def update_badges(self, id, format='html'):
-        #TODO ajax form ist not working with thumbnail badges, joka
         proposal = get_entity_or_abort(model.Proposal, id)
         editable_badges = self._editable_badges(proposal)
         editable_badges.extend(self._editable_thumbnailbadges(c.proposal))
@@ -533,9 +532,11 @@ class ProposalController(BaseController):
         post_update(proposal, model.update.UPDATE)
         if format == 'ajax':
             obj = {'badges_html': render_def('/badge/tiles.html', 'badges',
-                                      badges=proposal.badges),
-                   'thumbnailbadges_html': render_def('/badge/tiles.html', 'badges',
-                                      badges=proposal.thumbnails),
+                                             badges=proposal.badges),
+                   'thumbnailbadges_html': render_def('/badge/tiles.html',
+                                                      'badges',
+                                                      badges=
+                                                      proposal.thumbnails),
                    }
             return render_json(obj)
         if redirect_to_proposals:

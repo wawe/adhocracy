@@ -85,7 +85,7 @@ class InstanceBadgesForm(formencode.Schema):
 class InstanceCreateForm(formencode.Schema):
     allow_extra_fields = True
     key = formencode.All(validators.String(min=4, max=20),
-                              forms.UniqueInstanceKey())
+                         forms.UniqueInstanceKey())
     label = validators.String(min=4, max=254, not_empty=True)
     description = validators.String(max=100000, if_empty=None, not_empty=False)
 
@@ -99,7 +99,7 @@ class InstanceGeneralEditForm(formencode.Schema):
     hidden = validators.StringBool(not_empty=False, if_empty=False,
                                    if_missing=False)
     is_authenticated = validators.StringBool(not_empty=False, if_empty=False,
-                                          if_missing=False)
+                                             if_missing=False)
 
 
 class InstanceAppearanceEditForm(formencode.Schema):
@@ -171,7 +171,6 @@ class InstanceController(BaseController):
         c.tile = tiles.instance.InstanceTile(c.instance)
         return render("/instance/index.html")
 
-
     def new(self):
         require.instance.create()
         return render("/instance/new.html")
@@ -224,7 +223,7 @@ class InstanceController(BaseController):
         #c.tags = sorted(text.tag_cloud_normalize(tags),
         #                key=lambda (k, c, v): k.name)
 
-        if asbool(config.get('adhocracy.show_instance_overview_milestones')) \
+        if asbool(config.get('adhocracy.show_instance_overview_milestones'))\
            and c.page_instance.milestones:
 
             number = asint(config.get(
@@ -529,8 +528,10 @@ class InstanceController(BaseController):
             defaults={
                 '_method': 'PUT',
                 'css': c.page_instance.css,
-                'thumbnailbadges_width': c.page_instance.thumbnailbadges_width,
-                'thumbnailbadges_height': c.page_instance.thumbnailbadges_height,
+                'thumbnailbadges_width':
+                c.page_instance.thumbnailbadges_width,
+                'thumbnailbadges_height':
+                c.page_instance.thumbnailbadges_height,
                 '_tok': csrf.token_id()})
 
     @RequireInstance
@@ -559,8 +560,8 @@ class InstanceController(BaseController):
             if ('logo' in request.POST and
                 hasattr(request.POST.get('logo'), 'file') and
                 request.POST.get('logo').file):
-                logo.store(c.page_instance, request.POST.get('logo').file)
-                updated = True
+                    logo.store(c.page_instance, request.POST.get('logo').file)
+                    updated = True
         except Exception, e:
             model.meta.Session.rollback()
             h.flash(unicode(e), 'error')
@@ -589,7 +590,8 @@ class InstanceController(BaseController):
                 'allow_thumbnailbadges': instance.allow_thumbnailbadges,
                 'require_selection': instance.require_selection,
                 'hide_global_categories': instance.hide_global_categories,
-                'editable_comments_default': instance.editable_comments_default,
+                'editable_comments_default':
+                instance.editable_comments_default,
                 'frozen': instance.frozen,
                 '_tok': csrf.token_id()})
 
@@ -809,8 +811,8 @@ class InstanceController(BaseController):
 
         return ret_success(entity=c.page_instance, format=format,
                            message=_("Welcome to %(instance)s") % {
-                            'instance': c.page_instance.label},
-                            category='success')
+                           'instance': c.page_instance.label},
+                           category='success')
 
     def ask_leave(self, id):
         c.page_instance = self._get_current_instance(id)
@@ -823,15 +825,16 @@ class InstanceController(BaseController):
     def leave(self, id, format='html'):
         c.page_instance = self._get_current_instance(id)
         if not c.page_instance in c.user.instances:
-            return ret_abort(
-                entity=c.page_instance, format=format,
-                message=_("You're not a member of %(instance)s.") % {
-                                    'instance': c.page_instance.label})
+            return ret_abort(entity=c.page_instance,
+                             format=format,
+                             message=_("You're not a member of %(instance)s.")
+                             % {'instance': c.page_instance.label}
+                             )
         elif c.user == c.page_instance.creator:
             return ret_abort(
                 entity=c.page_instance, format=format,
-                message=_("You're the founder of %s, cannot leave.") % {
-                                    'instance': c.page_instance.label})
+                message=_("You're the founder of %s, cannot leave.")
+                % {'instance': c.page_instance.label})
         require.instance.leave(c.page_instance)
 
         for membership in c.user.memberships:
@@ -847,8 +850,8 @@ class InstanceController(BaseController):
                            instance=c.page_instance)
         model.meta.Session.commit()
         return ret_success(entity=c.page_instance, format=format,
-                           message=_("You've left %(instance)s.") % {
-                                'instance': c.page_instance.label})
+                           message=_("You've left %(instance)s.")
+                           % {'instance': c.page_instance.label})
 
     def _get_current_instance(self, id):
         if id != c.instance.key:
