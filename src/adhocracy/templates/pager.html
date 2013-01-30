@@ -115,14 +115,15 @@ ${facet_items(facet.current_items)}
 <ul>
     %for item in items:
     <li class="facet-item-level-${item['level']}">
-        ${h.literal(item['thumbnail'])}
         %if not item['visible']:
             <span />
         %elif item['disabled']:
+        ${h.literal(item['thumbnail'])}
         <span class="disabled">
             ${item['link_text']} (${item['current_count']})
         </span>
         %else:
+        ${h.literal(item['thumbnail'])}
             %if item['selected']:
             <span class="selected">
                 ${item['link_text']}
