@@ -238,7 +238,8 @@ class BadgeController(BaseController):
             thumbnail = thumbnail.file.read()
         else:
             thumbnail = None
-        ThumbnailBadge.create(title, color, visible, description, thumbnail, instance)
+        ThumbnailBadge.create(title, color, visible, description, instance,
+                              thumbnail)
         # commit cause redirect() raises an exception
         meta.Session.commit()
         redirect(self.base_url)
