@@ -470,7 +470,7 @@ class SolrFacet(SolrIndexer):
     def response(self, response):
         self._response = response
 
-    def getthumbnail(self, entity):
+    def get_thumbnail(self, entity):
         """"Returns a string with an img tag for the entity.
             Override to make use of this.
         """
@@ -606,7 +606,7 @@ class SolrFacet(SolrIndexer):
             item['selected'] = item['value'] in self.used
             item['url'] = self.get_item_url(item)
             item['visible'] = getattr(entity, 'visible', 'default')
-            item['thumbnail'] = self.getthumbnail(entity)
+            item['thumbnail'] = self.get_thumbnail(entity)
             item['level'] = len((token).split("/"))
             item['children'] = []
 
@@ -767,7 +767,7 @@ class DelegateableBadgeThumbnailFacet(SolrFacet):
     title = lazy_ugettext(u'Thumbnails')
     solr_field = 'facet.delegateable.badgethumbnail'
 
-    def getthumbnail(self, entity):
+    def get_thumbnail(self, entity):
         return generate_thumbnail_tag(entity, "16", "16")
 
     @property
