@@ -59,6 +59,29 @@ class TestValidators(TestController):
         value = validator.to_python('')
         self.assertEqual(value, None)
 
+    def test_valid_imagefile_upload(self):
+        from adhocracy.forms.common import ValidImageFileUpload
+        from formencode import Invalid
+        from cgi import FieldStorage
+        import StringIO
+        value = FieldStorage()
+        value.file = StringIO.StringIO("binarydata")
+        value.filename = "test.png"
+        value.name = "thumbs"
+        self.assertRaises(Invalid, ValidImageFileUpload.to_python, value)
+
+    def test_valid_file_upload(self):
+        from adhocracy.forms.common import ValidFileUpload
+        from formencode import Invalid
+        from cgi import FieldStorage
+        import StringIO
+        ValidFileUpload.max_size = 1
+        value = FieldStorage()
+        value.file = StringIO.StringIO("bi")
+        value.filename = "test.png"
+        value.name = "thumbs"
+        self.assertRaises(Invalid, ValidFileUpload.to_python, value)
+
 class TestHelpers(TestController):
 
     def test_get_badge_children_optgroups_no_hierarchy(self):
