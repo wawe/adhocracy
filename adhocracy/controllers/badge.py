@@ -10,7 +10,7 @@ from repoze.what.predicates import Any as WhatAnyPredicate
 from adhocracy.forms.common import ValidInstanceGroup, ValidHTMLColor,\
     ContainsChar
 from adhocracy.forms.common import ValidBadgeInstance, ValidCategoryBadge, \
-    get_badge_children_optgroups
+    get_badge_children_optgroups, ValidImageFileUpload, ValidFileUpload
 from adhocracy.model import Badge, CategoryBadge, DelegateableBadge,\
     UserBadge, InstanceBadge, ThumbnailBadge
 from adhocracy.model import Group, Instance, meta
@@ -41,7 +41,8 @@ class UserBadgeForm(BadgeForm):
 
 
 class ThumbnailBadgeForm(BadgeForm):
-    thumbnail = validators.FieldStorageUploadConverter(not_empty=False)
+    thumbnail = All(ValidImageFileUpload(not_empty=False),
+                    ValidFileUpload(not_empty=False), )
 
 
 AnyAdmin = WhatAnyPredicate(has_permission('global.admin'),
