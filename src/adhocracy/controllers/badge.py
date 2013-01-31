@@ -13,6 +13,8 @@ from adhocracy.forms.common import ContainsChar
 from adhocracy.forms.common import ValidBadgeInstance
 from adhocracy.forms.common import ValidCategoryBadge
 from adhocracy.forms.common import get_badge_children_optgroups
+from adhocracy.forms.common import ValidImageFileUpload
+from adhocracy.forms.common import ValidFileUpload
 from adhocracy.model import Badge
 from adhocracy.model import CategoryBadge
 from adhocracy.model import DelegateableBadge
@@ -47,7 +49,8 @@ class UserBadgeForm(BadgeForm):
 
 
 class ThumbnailBadgeForm(BadgeForm):
-    thumbnail = validators.FieldStorageUploadConverter(not_empty=False)
+    thumbnail = All(ValidImageFileUpload(not_empty=False),
+                    ValidFileUpload(not_empty=False), )
 
 
 AnyAdmin = WhatAnyPredicate(has_permission('global.admin'),
