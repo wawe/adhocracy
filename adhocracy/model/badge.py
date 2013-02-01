@@ -338,6 +338,13 @@ class ThumbnailBadge(DelegateableBadge):
         meta.Session.flush()
         return badge
 
+    def __repr__(self):
+        return "<%s(%s,%s,%s,%s)>" % (self.__class__.__name__,
+                                   self.id,
+                                   self.title.encode('ascii', 'replace'),
+                                   hash(self.thumbnail or ''),
+                                   self.color)
+
     def to_dict(self):
         d = super(ThumbnailBadge, self).to_dict()
         d['thumbnail'] = self.thumbnail or ""
