@@ -51,7 +51,7 @@ def get_site_directory(app_conf=None):
     if app_conf is None:
         app_conf = config
     rel = app_conf.get('adhocracy.site.dir',
-                     os.path.join(app_conf.get('here'), 'site'))
+                       os.path.join(app_conf.get('here'), 'site'))
     site_directory = os.path.abspath(rel)
     if not os.path.exists(site_directory):
         os.makedirs(site_directory)
