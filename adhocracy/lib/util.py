@@ -125,3 +125,14 @@ def generate_sequence(initial=10,
         current *= factor_deque[0]
         factor_deque.rotate(-1)
     yield int(current)
+
+
+def split_filter(condition, seq):
+    '''
+    Splits *seq* into two lists based on *condition*, the items in the first
+    list match the conditions, the items in the second list don't.
+    '''
+    a, b = [], []
+    for item in seq:
+        (a if condition(item) else b).append(item)
+    return a, b
