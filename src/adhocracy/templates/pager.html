@@ -115,9 +115,8 @@ ${facet_items(facet.current_items)}
 <ul>
     %for item in items:
     <li class="facet-item-level-${item['level']}">
-        %if not item['visible']:
-            <span />
-        %elif item['disabled']:
+        %if item['visible']:
+        %if item['disabled']:
         ${h.literal(item['thumbnail'])}
         <span class="disabled">
             ${item['link_text']}
@@ -142,6 +141,7 @@ ${facet_items(facet.current_items)}
         %endif
 
         ${facet_items(item["children"])}
+        %endif
 
     </li>
     %endfor
