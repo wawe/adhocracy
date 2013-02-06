@@ -1,11 +1,12 @@
-import uuid
+import collections
 import logging
 import os
 import os.path
 import shutil
 import time
-import collections
+import uuid
 
+from paste.deploy.converters import asbool
 from pylons import config
 from pylons.i18n import _
 
@@ -136,3 +137,13 @@ def split_filter(condition, seq):
     for item in seq:
         (a if condition(item) else b).append(item)
     return a, b
+
+
+def get_client_ip(environ):
+    if asbool(config.get('adhocracy.behind_proxy', 'false')):
+        try:
+            header_val = environ['HTTP_X_FORWARDED_FOR']
+            return header_val.rpartition(u',')[2].strip()
+        except KeyError:
+            pass
+    return environ['REMOTE_ADDR']

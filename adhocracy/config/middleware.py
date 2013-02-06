@@ -15,6 +15,7 @@ from adhocracy.lib.instance import setup_discriminator
 from adhocracy.lib.machine_name import IncludeMachineName
 from adhocracy.lib.util import get_site_path
 from adhocracy.config.environment import load_environment
+from adhocracy.lib.requestlog import RequestLogger
 
 
 def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
@@ -60,17 +61,15 @@ def make_app(global_conf, full_stack=True, static_files=True, **app_conf):
     # CUSTOM MIDDLEWARE HERE (filtered by error handling middlewares)
     app = setup_auth(app, config)
     app = setup_discriminator(app, config)
+    if asbool(config.get('adhocracy.requestlog_active', 'False')):
+        app = RequestLogger(app, config)
 
     if asbool(full_stack):
         # Handle Python exceptions
         app = ErrorHandler(app, global_conf, **config['pylons.errorware'])
 
-    # Display error documents for 401, 403, 404 status codes (and
-    # 500 when debug is disabled)
-    if debug:
-        app = StatusCodeRedirect(app)
-    else:
-        app = StatusCodeRedirect(app, [400, 401, 403, 404, 500])
+    # Display error documents for 401, 403, 404 status codes
+    app = StatusCodeRedirect(app, [400, 401, 403, 404, 500])
 
     # Establish the Registry for this application
     app = RegistryManager(app)

@@ -42,5 +42,21 @@ class TestText(TestController):
         self.assertEquals(result[:3], '<p>')
         self.assertEquals(result[-4:], '</p>')
         core_result = result[3:-4]
-        print(core_result)
         self.assertTrue(u'<' not in core_result)
+
+    def test_html_sanitizing(self):
+        from adhocracy.lib.text import render
+        source = '<h1>Hello</h1><script>XSS</script>' \
+                '<object>include_dangerous</object>' \
+                '<embed>include_dangerous</embed>' \
+                '<a href="javascript:bar()" onclick="javascript: alert(\'foo\')">lala</a>' \
+                '<iframe class="youtube-player" type="text/html" width="640" height="385"' \
+                ' src="http://www.youtube.com/embed/foo" frameborder="0">' \
+                '</iframe>'
+        result = render(source, safe_mode=False, _testing_allow_user_html=True)
+        self.assertTrue('<script' not in result)
+        self.assertTrue('<object' not in result)
+        self.assertTrue('<embed' not in result)
+        self.assertTrue('javascript' not in result)
+        self.assertTrue('<iframe' in result)
+
