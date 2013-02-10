@@ -223,8 +223,8 @@ class InstanceController(BaseController):
         #c.tags = sorted(text.tag_cloud_normalize(tags),
         #                key=lambda (k, c, v): k.name)
 
-        if (asbool(config.get('adhocracy.show_instance_overview_milestones'))
-                and c.page_instance.milestones):
+        if asbool(config.get('adhocracy.show_instance_overview_milestones')) \
+                and c.page_instance.milestones:
 
             number = asint(config.get(
                 'adhocracy.number_instance_overview_milestones', 3))
@@ -558,7 +558,7 @@ class InstanceController(BaseController):
         try:
             # fixme: show logo errors in the form
             if ('logo' in request.POST and
-                    hasattr(request.POST.get('logo'), 'file') and
+                hasattr(request.POST.get('logo'), 'file') and
                     request.POST.get('logo').file):
                 logo.store(c.page_instance, request.POST.get('logo').file)
                 updated = True
@@ -811,7 +811,8 @@ class InstanceController(BaseController):
 
         return ret_success(entity=c.page_instance, format=format,
                            message=_("Welcome to %(instance)s") % {
-                           'instance': c.page_instance.label},
+                               'instance': c.page_instance.label
+                           },
                            category='success')
 
     def ask_leave(self, id):
@@ -825,16 +826,15 @@ class InstanceController(BaseController):
     def leave(self, id, format='html'):
         c.page_instance = self._get_current_instance(id)
         if not c.page_instance in c.user.instances:
-            return ret_abort(entity=c.page_instance,
-                             format=format,
-                             message=_("You're not a member of %(instance)s.")
-                             % {'instance': c.page_instance.label}
-                             )
+            return ret_abort(
+                entity=c.page_instance, format=format,
+                message=_("You're not a member of %(instance)s.") % {
+                    'instance': c.page_instance.label})
         elif c.user == c.page_instance.creator:
             return ret_abort(
                 entity=c.page_instance, format=format,
-                message=_("You're the founder of %s, cannot leave.")
-                % {'instance': c.page_instance.label})
+                message=_("You're the founder of %s, cannot leave.") % {
+                    'instance': c.page_instance.label})
         require.instance.leave(c.page_instance)
 
         for membership in c.user.memberships:
@@ -850,8 +850,8 @@ class InstanceController(BaseController):
                            instance=c.page_instance)
         model.meta.Session.commit()
         return ret_success(entity=c.page_instance, format=format,
-                           message=_("You've left %(instance)s.")
-                           % {'instance': c.page_instance.label})
+                           message=_("You've left %(instance)s.") % {
+                               'instance': c.page_instance.label})
 
     def _get_current_instance(self, id):
         if id != c.instance.key:

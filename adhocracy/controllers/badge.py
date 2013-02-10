@@ -7,12 +7,20 @@ from pylons.i18n import _
 from repoze.what.plugins.pylonshq import ActionProtector
 from repoze.what.predicates import Any as WhatAnyPredicate
 
-from adhocracy.forms.common import ValidInstanceGroup, ValidHTMLColor,\
-    ContainsChar
-from adhocracy.forms.common import ValidBadgeInstance, ValidCategoryBadge, \
-    get_badge_children_optgroups, ValidImageFileUpload, ValidFileUpload
-from adhocracy.model import Badge, CategoryBadge, DelegateableBadge,\
-    UserBadge, InstanceBadge, ThumbnailBadge
+from adhocracy.forms.common import ValidInstanceGroup
+from adhocracy.forms.common import ValidHTMLColor
+from adhocracy.forms.common import ContainsChar
+from adhocracy.forms.common import ValidBadgeInstance
+from adhocracy.forms.common import ValidCategoryBadge
+from adhocracy.forms.common import get_badge_children_optgroups
+from adhocracy.forms.common import ValidImageFileUpload
+from adhocracy.forms.common import ValidFileUpload
+from adhocracy.model import Badge
+from adhocracy.model import CategoryBadge
+from adhocracy.model import DelegateableBadge
+from adhocracy.model import UserBadge
+from adhocracy.model import InstanceBadge
+from adhocracy.model import ThumbnailBadge
 from adhocracy.model import Group, Instance, meta
 from adhocracy.lib import helpers as h
 from adhocracy.lib.auth.authorization import has, has_permission
@@ -185,8 +193,8 @@ class BadgeController(BaseController):
             self.form_result)
         group = self.form_result.get('group')
         display_group = self.form_result.get('display_group')
-        UserBadge.create(title, color, visible, description, group, display_group,
-                         instance)
+        UserBadge.create(title, color, visible, description, group,
+                         display_group, instance)
         # commit cause redirect() raises an exception
         meta.Session.commit()
         redirect(self.base_url)

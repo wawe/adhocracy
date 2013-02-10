@@ -33,7 +33,7 @@ setup(
     install_requires=[
         "Pylons==1.0.1",
         "WebOb==1.2.3",
-        "SQLAlchemy==0.7.9",
+        "SQLAlchemy==0.7.10",
         "sqlalchemy-migrate>=0.6",
         "FormEncode>=1.2.4",
         "repoze.who>=2.0",
@@ -54,7 +54,7 @@ setup(
         "python-memcached>=1.45",
         "sunburnt==0.6",
         "PIL>=1.1.6",
-        "Markdown>=2.2.1",
+        "secure-Markdown>2.2.1",
         "lxml>=2.2.6",
         "Mako>=0.7.3",
         "MarkupSafe>=0.15",

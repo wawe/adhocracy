@@ -39,7 +39,7 @@ def RequireInternalRequest(methods=['POST', 'GET', 'PUT', 'DELETE']):
             identifier = request.environ.get(
                 'repoze.who.identity', {}).get('identifier')
             if (identifier is not None and
-                isinstance(identifier, BasicAuthPlugin)):
+                    isinstance(identifier, BasicAuthPlugin)):
                 return True
             if (identifier is not None and
                 isinstance(identifier, AuthTktCookiePlugin)):

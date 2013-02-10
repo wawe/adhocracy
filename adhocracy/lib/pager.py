@@ -947,7 +947,7 @@ class NormNumSelectionsIndexer(SolrIndexer):
     @classmethod
     def add_data_to_index(cls, entity, data):
         if (isinstance(entity, model.Page) and
-            entity.function == model.Page.NORM):
+                entity.function == model.Page.NORM):
             data[cls.solr_field] = len(entity.selections)
 
 
@@ -958,7 +958,7 @@ class NormNumVariantsIndexer(SolrIndexer):
     @classmethod
     def add_data_to_index(cls, entity, data):
         if (isinstance(entity, model.Page) and
-            entity.function == model.Page.NORM):
+                entity.function == model.Page.NORM):
             data[cls.solr_field] = len(entity.selections)
 
 
